@@ -37,6 +37,18 @@ FFI-модуль локально делает `#[allow(unsafe_code)]`, всё �
 Плюс анализ графа связей FlyWire FAFB v783 через SQLite, JSONL-протокол
 для внешних моделей, адаптеры под PyTorch/ONNX/spiking/RL.
 
+### [YandexGame](https://github.com/Teivrim/YandexGame) — 4 игры в сторе
+
+Браузерные игры на чистых HTML/CSS/JS с Canvas 2D, **все опубликованы**:
+[NEON//COURIER](https://teivrim.itch.io/neon-courier) (аркада на выживание),
+NEON//BASTION (башенная оборона, 30 волн), NEON//DESCENT (roguelite, 10 этажей,
+3 класса), NEON//VECTOR (точная платформенная аркада, рекорды времени).
+У одной из них адаптер официального Yandex Games SDK.
+
+Здесь важно другое: это не «проект в репозитории», это **законченные
+продукты, дошедшие до пользователя**. Релизный цикл, ассеты для листингов,
+публикация.
+
 ### [rust-course](https://github.com/Teivrim/rust-course) — Rust с нуля
 
 20 модулей, **14 912 строк, ноль зависимостей**. Только `std` — ни `serde`,
