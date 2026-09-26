@@ -8,6 +8,9 @@
 
 [![услуги](https://img.shields.io/badge/услуги-teivrim.github.io-5eead4?style=for-the-badge)](https://teivrim.github.io)
 [![Telegram](https://img.shields.io/badge/Telegram-@TEIVRIM-2AABEE?style=for-the-badge)](https://t.me/TEIVRIM)
+[![CI](https://github.com/Teivrim/rust-course/actions/workflows/ci.yml/badge.svg)](https://github.com/Teivrim/rust-course/actions/workflows/ci.yml)
+[![CI](https://github.com/Teivrim/PolygonEditor/actions/workflows/ci.yml/badge.svg)](https://github.com/Teivrim/PolygonEditor/actions/workflows/ci.yml)
+[![CI](https://github.com/Teivrim/TDEvuris/actions/workflows/ci.yml/badge.svg)](https://github.com/Teivrim/TDEvuris/actions/workflows/ci.yml)
 
 </div>
 
@@ -80,6 +83,36 @@ C++20 / Win32: таймлайн, инспектор, undo/redo на уровне
 | PolygonEditor | 3 801 | 4 |
 | NovellEngine | 3 319 | **0** |
 | TDEvuris | 3 253 | **0** |
+
+---
+
+## Сборка проверяется в CI
+
+Каждый репозиторий с workflow: при каждом коммите GitHub собирает проект
+на свежем раннере. Это не обещание в README, это проверяемый факт.
+
+| Репозиторий | Что делает CI |
+|---|---|
+| [rust-course](https://github.com/Teivrim/rust-course) | собирает 20 бинарников, гоняет 19 модулей, clippy |
+| [PolygonEditor](https://github.com/Teivrim/PolygonEditor) | CMake + Ninja, MinGW, проверка бинарника |
+| [TDEvuris](https://github.com/Teivrim/TDEvuris) | CMake + MSVC, проверка бинарника |
+| [NovellEngine](https://github.com/Teivrim/NovellEngine) | `build.bat`, MinGW g++ |
+| [FlyTest](https://github.com/Teivrim/FlyTest) | C-ядро TFLY + Rust-runtime, MinGW |
+| [YandexGame](https://github.com/Teivrim/YandexGame) | синтаксис JS, состав поставки |
+
+**Что этот CI уже нашёл.** Репозиторий проходил локальную сборку, но не
+собирался на чистой машине. Причины оказались неочевидными:
+
+- `.gitignore` вырезал `src/bin/` вместе со сборкой — все 20 модулей курса
+  отсутствовали в репозитории, хотя лежали на диске;
+- макросы `min`/`max` из `<windows.h>` ломали `std::min` под MSVC (`C2589`);
+- код использовал designated initializers при `CMAKE_CXX_STANDARD 17` —
+  MinGW прощал как расширение, MSVC отказывался (`C7555`);
+- точка входа была `WinMain`, а линковка шла как `/subsystem:console`.
+
+Локальная сборка этого не показывала: машина была одна и всегда одна и та же.
+Клонировать репозиторий на чужой компьютер — единственный честный тест,
+и CI делает его бесплатно на каждом коммите.
 
 ---
 
