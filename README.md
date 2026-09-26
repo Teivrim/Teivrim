@@ -29,18 +29,37 @@
 
 ## Портфолио
 
-Код написан с нуля и лежит открыто. Не скриншоты — исходники под MIT.
+Не скриншоты — исходники. Каждый проект собирается одной командой, лицензия MIT.
+Полное описание и статус сборки: **[портфолио](https://teivrim.github.io/proof.html)**
 
-| Проект | Строк | Зависим. | Стек |
-|---|---:|---:|---|
-| [Novell Engine](https://github.com/Teivrim/NovellEngine) — редактор визуальных новел | 3 319 | 0 | C++20, Win32, GDI+ |
-| [PolygonEditor](https://github.com/Teivrim/PolygonEditor) — 3D-редактор сцен | 3 801 | 4 | C++17, OpenGL, Assimp |
-| [Rust Course](https://github.com/Teivrim/rust-course) — 20 модулей, zero deps | 14 912 | 0 | Rust 2024, std-only |
-| [TDEvuris](https://github.com/Teivrim/TDEvuris) — набор Windows-сканеров | 3 253 | 0 | C++17, Win32 |
-| [Eblya 2D Engine](https://github.com/Teivrim/Eblya-2D-Engine) — редактор 2D | 4 940 | 4 | C++17, OpenGL, ImGui |
-| [ImGui Editor Starter](https://github.com/Teivrim/ImGui-Editor-Starter) | 4 978 | 4 | C++17, CMake, ImGui |
+### [rust-course](https://github.com/Teivrim/rust-course)
+Rust с нуля до движка. 20 модулей, **14 912 строк, ноль зависимостей** — только `std`.
+Каждый модуль — отдельная программа, харнесс ловит `todo!()` через `catch_unwind` и ставит оценку.
+Таблица соответствия C++ → Rust из 51 перевода. `cargo build --release` → 20 бинарников за 15 с.
 
-Подробности и статус сборки: **[портфолио](https://teivrim.github.io/proof.html)**
+### [PolygonEditor](https://github.com/Teivrim/PolygonEditor)
+3D-редактор сцен на C++17 / OpenGL. Импорт FBX через Assimp, два рендер-бэкенда
+(GLFW/OpenGL для сцены, Win32/GDI+ для интерфейса), CMake, сборка **без сети** —
+зависимости вендорёны. `cmake -B build && cmake --build build`.
+
+### [NovellEngine](https://github.com/Teivrim/NovellEngine)
+Редактор визуальных новел на C++20 / Win32. Таймлайн, панель скрипта, инспектор,
+undo/redo на уровне команд, snap-to-grid, свой формат проекта `.vne`.
+**Ноль сторонних библиотек** — только системные Win32. `build.bat`.
+
+### [TDEvuris](https://github.com/Teivrim/TDEvuris)
+Набор Windows-сканеров на C++17: boot, memory, network, registry, shredder, hasher,
+эвристики, подписи, updater. 13 отдельных бинарников вместо монолита.
+Ноль зависимостей, чистый Win32.
+
+| Проект | Строк | Зависим. |
+|---|---:|---:|
+| rust-course | 14 912 | **0** |
+| PolygonEditor | 3 801 | 4 |
+| NovellEngine | 3 319 | **0** |
+| TDEvuris | 3 253 | **0** |
+
+**25 285 строк оригинального кода, copyleft нет нигде.**
 
 ---
 
@@ -50,6 +69,8 @@
 - **Не беру задачу, если не влезает в бюджет.** Предлагаю, что урезать. Не делаю наполовину.
 - **Отдаю то, что собирается.** Сборка одной командой у заказчика, а не «у меня работает».
 - **Ноль телеметрии.** Код не ходит в сеть за спиной, не требует активации, не звонит домой.
+- **Показываю неудачу тоже.** В репозиториях лежит `BUILD-REPORT.md` с реальным результатом сборки,
+  включая то, что не собралось и почему.
 
 ---
 
