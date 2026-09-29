@@ -6,6 +6,7 @@
 
 Нейронаука и ML · геймплей · движки и редакторы · системное программирование
 
+[![CI](https://github.com/Teivrim/ImGui-Editor-Starter/actions/workflows/ci.yml/badge.svg)](https://github.com/Teivrim/ImGui-Editor-Starter/actions/workflows/ci.yml)
 [![услуги](https://img.shields.io/badge/услуги-teivrim.github.io-5eead4?style=for-the-badge)](https://teivrim.github.io)
 [![Telegram](https://img.shields.io/badge/Telegram-@TEIVRIM-2AABEE?style=for-the-badge)](https://t.me/TEIVRIM)
 [![CI](https://github.com/Teivrim/rust-course/actions/workflows/ci.yml/badge.svg)](https://github.com/Teivrim/rust-course/actions/workflows/ci.yml)
@@ -51,6 +52,17 @@ NEON//BASTION (башенная оборона, 30 волн), NEON//DESCENT (rog
 Здесь важно другое: это не «проект в репозитории», это **законченные
 продукты, дошедшие до пользователя**. Релизный цикл, ассеты для листингов,
 публикация.
+
+### [ImGui-Editor-Starter](https://github.com/Teivrim/ImGui-Editor-Starter) — каркас редактора
+
+C++17, Dear ImGui + OpenGL: документ, слои, композиция, undo/redo, менеджер
+плагинов, планировщик задач, цепочка эффектов. 4 782 строки в 24 файлах,
+подсистемы разделены по каталогам.
+
+**Собирается офлайн одной командой.** GLFW, Dear ImGui, stb и GLAD 2
+вендорёны в `third_party` — 61 МБ исходников в репозитории, `FetchContent`
+нет вообще. CI падает, если зависимости вернутся в сеть или если вернётся
+GLEW: обе поломки молчаливые до чистой машины, и на них проект и стоял.
 
 ### [rust-course](https://github.com/Teivrim/rust-course) — Rust с нуля
 
@@ -99,6 +111,7 @@ C++20 / Win32: таймлайн, инспектор, undo/redo на уровне
 | [NovellEngine](https://github.com/Teivrim/NovellEngine) | `build.bat`, MinGW g++ |
 | [FlyTest](https://github.com/Teivrim/FlyTest) | C-ядро TFLY + Rust-runtime, MinGW |
 | [YandexGame](https://github.com/Teivrim/YandexGame) | синтаксис JS, состав поставки |
+| [ImGui-Editor-Starter](https://github.com/Teivrim/ImGui-Editor-Starter) | CMake + Ninja, офлайн-сборка, запрет возврата GLEW |
 
 **Что этот CI уже нашёл.** Репозиторий проходил локальную сборку, но не
 собирался на чистой машине. Причины оказались неочевидными:
