@@ -41,6 +41,31 @@ FFI-модуль локально делает `#[allow(unsafe_code)]`, всё �
 Плюс анализ графа связей FlyWire FAFB v783 через SQLite, JSONL-протокол
 для внешних моделей, адаптеры под PyTorch/ONNX/spiking/RL.
 
+### [UE-Gameplay-Kit](https://github.com/Teivrim/UE-Gameplay-Kit) — геймплей на UE 5.8
+
+Три раздельных `GameMode` в одном проекте: Combat, SideScrolling,
+Platforming. 5 192 строки в 87 файлах, 29 типов `UCLASS`/`USTRUCT`/`UENUM`,
+ноль сторонних зависимостей.
+
+Логику поведения видно с двух сторон и это не дань моде: решения принимает
+StateTree, а задачи и условия — C++-классы (`CombatStateTreeUtility`,
+`SideScrollingStateTreeUtility`). Их можно править в редакторе, не пересобирая
+модуль. EQS-контексты цели и опасности — отдельные `UEnvQueryContext`, а не
+лямбды в GameMode, поэтому их переиспользуют в любом дереве запросов.
+
+**Движок в CI не собирается** — UE 5.8 это около 100 ГБ, и лицензия не
+разрешает ставить его на hosted runner. Вместо того чтобы объявить проверку
+невозможной, `scripts/check_uproject.py` ловит то, что видно из исходников и
+из-за чего проект не собирается: `UCLASS` без `.generated.h` или с ним не
+последним, модуль без строки в `Build.cs`, выключенный плагин, заголовок,
+который никто не включает. Он нашёл одну настоящую ошибку:
+`UPhysicsConstraintComponent` в `CombatDummy` без модуля `PhysicsCore`.
+
+Что проверка не ловит, написано у неё в выводе: существование заголовков
+движка. Без установленного UE нельзя отличить сломанный include от include
+движка, и первая версия проверки именно этим и обзавелась — 236 расхождений,
+из которых полезных ноль.
+
 ### [YandexGame](https://github.com/Teivrim/YandexGame) — 4 игры в сторе
 
 Браузерные игры на чистых HTML/CSS/JS с Canvas 2D, **все опубликованы**:
@@ -112,6 +137,7 @@ C++20 / Win32: таймлайн, инспектор, undo/redo на уровне
 | [FlyTest](https://github.com/Teivrim/FlyTest) | C-ядро TFLY + Rust-runtime, MinGW |
 | [YandexGame](https://github.com/Teivrim/YandexGame) | синтаксис JS, состав поставки |
 | [ImGui-Editor-Starter](https://github.com/Teivrim/ImGui-Editor-Starter) | CMake + Ninja, офлайн-сборка, запрет возврата GLEW |
+| [UE-Gameplay-Kit](https://github.com/Teivrim/UE-Gameplay-Kit) | согласованность UE-проекта без движка, наличие ассетов |
 
 **Что этот CI уже нашёл.** Репозиторий проходил локальную сборку, но не
 собирался на чистой машине. Причины оказались неочевидными:
@@ -121,11 +147,25 @@ C++20 / Win32: таймлайн, инспектор, undo/redo на уровне
 - макросы `min`/`max` из `<windows.h>` ломали `std::min` под MSVC (`C2589`);
 - код использовал designated initializers при `CMAKE_CXX_STANDARD 17` —
   MinGW прощал как расширение, MSVC отказывался (`C7555`);
-- точка входа была `WinMain`, а линковка шла как `/subsystem:console`.
+- точка входа была `WinMain`, а линковка шла как `/subsystem:console`;
+- в `rustup set profile minimal` не входят `rustfmt` и `clippy`, поэтому
+  `cargo fmt` и `cargo clippy` падали с подсказкой «run `rustup component
+  add`». Код был чистым всё это время, а падали две проверки из одиннадцати;
+- `FetchContent` тянул GLFW, Dear ImGui и stb из сети, хотя все три уже
+  лежали в `third_party` — проект не собирался без интернета, хотя всё
+  нужное было рядом;
+- `GLEW` в теге `glew-2.2.0` содержит только шаблон `glew.c.in`, а
+  настоящий `glew.c` генерируется шагом, который CMake не выполняет;
+- `PhysicsCore` не был объявлен в `Build.cs`, хотя `CombatDummy` создаёт
+  `UPhysicsConstraintComponent`.
 
 Локальная сборка этого не показывала: машина была одна и всегда одна и та же.
 Клонировать репозиторий на чужой компьютер — единственный честный тест,
 и CI делает его бесплатно на каждом коммите.
+
+Три из этих пяти поломок жили не в коде, а в обвязке: `.gitignore`,
+профиль `rustup`, шаблон `CMakeLists`. Их не видно ни при каком чтении
+исходников — видно только на чистой машине.
 
 ---
 
